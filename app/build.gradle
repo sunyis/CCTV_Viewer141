@@ -15,8 +15,18 @@ android {
         ndk{abiFilters "armeabi", "armeabi-v7a", "x86", "mips"}
     }
 
+    signingConfigs{
+        release{
+            storeFile file("./key.jks")
+            storePassword "111111"
+            keyAlias "key0"
+            keyPassword "111111"
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }

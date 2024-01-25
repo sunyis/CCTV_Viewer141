@@ -473,6 +473,8 @@ public class MainActivity extends AppCompatActivity {
                     webView.evaluateJavascript(scriptZoomOut, null);
                 } else if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
 
+                    showChannelList();
+                    return true;
                     if (doubleEnterPressedOnce) {
                         // 双击操作
 

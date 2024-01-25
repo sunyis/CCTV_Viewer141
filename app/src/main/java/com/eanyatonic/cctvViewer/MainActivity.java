@@ -2,6 +2,15 @@ package com.eanyatonic.cctvViewer;
 
 import static com.eanyatonic.cctvViewer.FileUtils.copyAssets;
 
+import static java.lang.Thread.sleep;
+import android.net.http.SslError;
+import android.webkit.SslErrorHandler;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -19,18 +28,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.tencent.smtt.export.external.TbsCoreSettings;
-import com.tencent.smtt.sdk.QbSdk;
-import com.tencent.smtt.sdk.WebChromeClient;
-import com.tencent.smtt.sdk.WebSettings;
-import com.tencent.smtt.sdk.WebView;
-import com.tencent.smtt.sdk.WebViewClient;
-
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    private com.tencent.smtt.sdk.WebView webView; // 导入 X5 WebView
+    private WebView webView; // 导入 X5 WebView
 
     private String[] liveUrls = {
             "https://tv.cctv.com/live/cctv1/",
@@ -175,44 +177,33 @@ public class MainActivity extends AppCompatActivity {
         // 加载上次保存的位置
         loadLastLiveIndex();
 
-        copyAssets(this, "045738_x5.tbs.apk", "/data/user/0/com.eanyatonic.cctvViewer/app_tbs/045738_x5.tbs.apk");
 
-        boolean canLoadX5 = QbSdk.canLoadX5(getApplicationContext());
-        Log.d("canLoadX5", String.valueOf(canLoadX5));
-//        if (canLoadX5) {
-            QbSdk.installLocalTbsCore(getApplicationContext(), 45738, "/data/user/0/com.eanyatonic.cctvViewer/app_tbs/045738_x5.tbs.apk");
-//        }
-
-        HashMap<String, Object> map = new HashMap<>(2);
-        map.put(TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER, true);
-        map.put(TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE, true);
-        QbSdk.initTbsSettings(map);
 
 
         // 配置 WebView 设置
-        com.tencent.smtt.sdk.WebSettings webSettings = webView.getSettings();
+       WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
         webSettings.setDatabaseEnabled(true);
-        webSettings.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36");
+        webSettings.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36");
 
         // 启用 JavaScript 自动点击功能
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            webSettings.setMixedContentMode(com.tencent.smtt.sdk.WebSettings.LOAD_NORMAL);
+            webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
 
         // 设置 WebViewClient 和 WebChromeClient
-        webView.setWebViewClient(new com.tencent.smtt.sdk.WebViewClient() {
+        webView.setWebViewClient(new WebViewClient() {
             @Override
-            public void onReceivedSslError(com.tencent.smtt.sdk.WebView webView, com.tencent.smtt.export.external.interfaces.SslErrorHandler handler, com.tencent.smtt.export.external.interfaces.SslError error) {
+            public void onReceivedSslError(WebView webView, SslErrorHandler handler, SslError error) {
                 handler.proceed(); // 忽略 SSL 错误
             }
 
             // 设置 WebViewClient，监听页面加载完成事件
             @Override
-            public void onPageFinished(com.tencent.smtt.sdk.WebView view, String url) {
+            public void onPageFinished(WebView view, String url) {
                     // 页面加载完成后执行 JavaScript 脚本
 
                     // 清空info

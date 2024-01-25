@@ -475,6 +475,7 @@ public class MainActivity extends AppCompatActivity {
 
                     showChannelList();
                     return true;
+                } else if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
                     if (doubleEnterPressedOnce) {
                         // 双击操作
 

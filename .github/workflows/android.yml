@@ -34,7 +34,6 @@ jobs:
         tag_name: tagv${{ github.run_number }}
         release_name: Release${{ github.run_number }}
         body: |
-           body: |
             ${{ steps.Changelog.outputs.changelog }}
         draft: false
         prerelease: false

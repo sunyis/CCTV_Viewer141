@@ -7,7 +7,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.eanyatonic.cctvViewer"
+        applicationId "com.eanyatonic.cctvViewer.my"
         minSdk 19
         targetSdk 32
         versionCode 14

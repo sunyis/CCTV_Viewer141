@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    void doFullScren(WebView view){
+    void doFullScren(WebView view,boolean isShowInfo){
         // 页面加载完成后执行 JavaScript 脚本
 
         // 清空info
@@ -261,16 +261,18 @@ public class MainActivity extends AppCompatActivity {
             }, 3000);
         }
 
-        new Handler().postDelayed(() -> {
-            // 模拟触摸
-            simulateTouch(view, 0.5f, 0.5f);
+        if(isShowInfo) {
+            new Handler().postDelayed(() -> {
+                // 模拟触摸
+                simulateTouch(view, 0.5f, 0.5f);
 
-            // 隐藏加载的 View
-            loadingOverlay.setVisibility(View.GONE);
+                // 隐藏加载的 View
+                loadingOverlay.setVisibility(View.GONE);
 
-            // 显示覆盖层，传入当前频道信息
-            showOverlay(channelNames[currentLiveIndex] + "\n" + info);
-        }, 50);
+                // 显示覆盖层，传入当前频道信息
+                showOverlay(channelNames[currentLiveIndex] + "\n" + info);
+            }, 2000);
+        }
     }
 
 
@@ -322,7 +324,7 @@ public class MainActivity extends AppCompatActivity {
             // 设置 WebViewClient，监听页面加载完成事件
             @Override
             public void onPageFinished(WebView view, String url) {
-                    doFullScren(view);
+                    doFullScren(view,true);
                 }
             });
 
@@ -367,7 +369,7 @@ public class MainActivity extends AppCompatActivity {
     // 启动自动播放定时任务
     private void startPeriodicTask() {
         // 使用 postDelayed 方法设置定时任务
-        handler.postDelayed(periodicTask, 5000); // 5000 毫秒，即 5 秒钟
+        handler.postDelayed(periodicTask, 16); // 5000 毫秒，即 5 秒钟
     }
 
     // 定时任务具体操作
@@ -378,7 +380,7 @@ public class MainActivity extends AppCompatActivity {
             getDivDisplayPropertyAndDoSimulateTouch();
 
             // 完成后再次调度定时任务
-            handler.postDelayed(this, 5000); // 5000 毫秒，即 5 秒钟
+            handler.postDelayed(this, 16); // 5000 毫秒，即 5 秒钟
         }
     };
 
@@ -403,7 +405,7 @@ public class MainActivity extends AppCompatActivity {
                     """;
                 webView.evaluateJavascript(scriptPlay, null);
             }
-            doFullScren(webView);
+            doFullScren(webView,false);
         }
     }
 

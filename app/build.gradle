@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.eanyatonic.cctvViewer.my'
+    namespace 'com.eanyatonic.cctvViewer'
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.eanyatonic.cctvViewer.my"
+        applicationId "com.eanyatonic.cctvViewer"
         minSdk 19
         targetSdk 32
         versionCode 14

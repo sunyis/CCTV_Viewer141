@@ -405,7 +405,7 @@ public class MainActivity extends AppCompatActivity {
                     """;
                 webView.evaluateJavascript(scriptPlay, null);
             }
-            doFullScren(webView,false);
+            //doFullScren(webView,false);
         }
     }
 

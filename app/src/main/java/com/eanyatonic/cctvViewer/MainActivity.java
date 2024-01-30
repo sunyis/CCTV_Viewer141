@@ -369,7 +369,7 @@ public class MainActivity extends AppCompatActivity {
     // 启动自动播放定时任务
     private void startPeriodicTask() {
         // 使用 postDelayed 方法设置定时任务
-        handler.postDelayed(periodicTask, 16); // 5000 毫秒，即 5 秒钟
+        handler.postDelayed(periodicTask, 1000); // 5000 毫秒，即 5 秒钟
     }
 
     // 定时任务具体操作
@@ -380,7 +380,7 @@ public class MainActivity extends AppCompatActivity {
             getDivDisplayPropertyAndDoSimulateTouch();
 
             // 完成后再次调度定时任务
-            handler.postDelayed(this, 16); // 5000 毫秒，即 5 秒钟
+            handler.postDelayed(this, 1000); // 5000 毫秒，即 5 秒钟
         }
     };
 

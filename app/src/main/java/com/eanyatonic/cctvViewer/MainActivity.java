@@ -8,6 +8,7 @@ import static java.lang.Thread.sleep;
 
 import android.graphics.Bitmap;
 import android.net.http.SslError;
+import android.os.Looper;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -33,6 +34,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.HashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private int currentLiveIndex;
+    private int currentLiveIndex=1;
 
     private static final String PREF_NAME = "MyPreferences";
     private static final String PREF_KEY_LIVE_INDEX = "currentLiveIndex";
@@ -143,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
                                             //alert(fullscreenBtn)
                                           fullscreenBtn.click();
                                           document.querySelector('video').volume=1;
+                                          //alert(window.location.href);
                                          }else{
                                              setTimeout(
                                                 ()=>{ af();}
@@ -170,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
         // 设置 WebView 客户端
         webView.setWebChromeClient(new WebChromeClient());
 
+        //webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         // 加载初始网页
         loadLiveUrl();
     }
@@ -179,13 +185,16 @@ public class MainActivity extends AppCompatActivity {
         // 构建频道列表对话框
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("选择频道");
-
         // 设置频道列表项
         builder.setItems(channelNames, (dialog, which) -> {
-            // 在此处处理选择的频道
-            currentLiveIndex = which;
-            loadLiveUrl();
-            saveCurrentLiveIndex(); // 保存当前位置
+            if(which==0){
+                webView.reload();
+            }else {
+                // 在此处处理选择的频道
+                currentLiveIndex = which;
+                loadLiveUrl();
+                saveCurrentLiveIndex(); // 保存当前位置
+            }
         });
 
         // 显示对话框
@@ -301,7 +310,35 @@ public class MainActivity extends AppCompatActivity {
             //loadingOverlay.setVisibility(View.VISIBLE);
 
             webView.setInitialScale(getMinimumScale());
-            webView.loadUrl(liveUrls[currentLiveIndex]);
+            //webView.stopLoading();
+            //webView.clearCache(true);
+            //webView.clearHistory();
+            //webView.loadUrl(liveUrls[1]);
+            var url=liveUrls[currentLiveIndex];
+            String htmlData = "<html><body>Your HTML content</body></html>";
+            //webView.loadData(htmlData, "text/html", "UTF-8");
+            webView.loadUrl(url);
+            if(url.startsWith("https://www.yangshipin.cn")) {
+                ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+                // 定义要执行的任务
+                Runnable task = () -> {
+                    // 在这里放置你要延迟执行的代码
+                    //System.out.println("函数执行了！");
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            webView.reload();
+                        }
+                    });
+                };
+
+                // 延迟执行任务，时间单位为秒（例如，延迟5秒执行可以设置为5）
+                long delay = 1;
+                scheduler.schedule(task, delay, TimeUnit.MILLISECONDS);
+                scheduler.shutdown();
+            }
+            //webView.reload();
         }
     }
 

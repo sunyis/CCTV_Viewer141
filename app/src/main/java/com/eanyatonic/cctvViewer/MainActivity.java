@@ -9,6 +9,7 @@ import static java.lang.Thread.sleep;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.Looper;
+import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean doubleEnterPressedOnce = false;
     private boolean doubleEnterPressedTwice = false;
 
+    private boolean waitReload;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +82,24 @@ public class MainActivity extends AppCompatActivity {
 
         // 初始化 WebView
         webView = findViewById(R.id.webView);
+        // 直接传入函数
+        webView.addJavascriptInterface(new Object() {
+
+            // 提供给JavaScript调用的方法
+            @JavascriptInterface
+            public void reload(String message) {
+                if(waitReload){
+                    new Handler(webView.getContext().getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            webView.reload();
+                        }
+                    });
+                    waitReload=false;
+                }
+            }
+
+        }, "Android");
 
         webView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -148,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
                                           fullscreenBtn.click();
                                           document.querySelector('video').volume=1;
                                           //alert(window.location.href);
+                                          window.Android.reload("Hello from WebView!")
                                          }else{
                                              setTimeout(
                                                 ()=>{ af();}
@@ -318,7 +339,9 @@ public class MainActivity extends AppCompatActivity {
             String htmlData = "<html><body>Your HTML content</body></html>";
             //webView.loadData(htmlData, "text/html", "UTF-8");
             webView.loadUrl(url);
+            waitReload=false;
             if(url.startsWith("https://www.yangshipin.cn")) {
+                waitReload=true;
                 ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
                 // 定义要执行的任务
@@ -328,13 +351,13 @@ public class MainActivity extends AppCompatActivity {
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            webView.reload();
+                            //webView.reload();
                         }
                     });
                 };
 
                 // 延迟执行任务，时间单位为秒（例如，延迟5秒执行可以设置为5）
-                long delay = 1;
+                long delay = 1000;
                 scheduler.schedule(task, delay, TimeUnit.MILLISECONDS);
                 scheduler.shutdown();
             }

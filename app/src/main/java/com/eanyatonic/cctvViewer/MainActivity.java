@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                     new Handler(webView.getContext().getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            webView.reload();
+                            //webView.reload();
                         }
                     });
                     waitReload=false;

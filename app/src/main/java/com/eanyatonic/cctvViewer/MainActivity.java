@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
         webSettings.setDatabaseEnabled(true);
         webSettings.setMediaPlaybackRequiresUserGesture(false);
         webSettings.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36");
+        webSettings.setBlockNetworkImage(true);
 
         // 启用 JavaScript 自动点击功能
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
@@ -204,51 +205,7 @@ public class MainActivity extends AppCompatActivity {
                     navigateToNextLive();
                     return true;  // 返回 true 表示事件已处理，不传递给 WebView
                 } else if(event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT){
-                      String scriptZoomIn =
-                              """
-                              // 获取当前页面的缩放比例
-                              function getZoom() {
-                                return parseFloat(document.body.style.zoom) || 1;
-                              }
-                                                            
-                              // 设置页面的缩放比例
-                              function setZoom(zoom) {
-                                document.body.style.zoom = zoom;
-                              }
-                                                            
-                              // 页面放大函数
-                              function zoomIn() {
-                                var zoom = getZoom();
-                                setZoom(zoom + 0.1);
-                              }
-                              
-                              zoomIn();
-                              """;
-                      webView.evaluateJavascript(scriptZoomIn, null);
                 }else if(event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT){
-                    String scriptZoomOut =
-                            """
-                            // 获取当前页面的缩放比例
-                            function getZoom() {
-                              return parseFloat(document.body.style.zoom) || 1;
-                            }
-                                                          
-                            // 设置页面的缩放比例
-                            function setZoom(zoom) {
-                              document.body.style.zoom = zoom;
-                            }
-                                                          
-                            // 页面缩小函数
-                            function zoomOut() {
-                              var zoom = getZoom();
-                              if (zoom > 0.2) {
-                                setZoom(zoom - 0.1);
-                              }
-                            }
-                            
-                            zoomOut();
-                            """;
-                    webView.evaluateJavascript(scriptZoomOut, null);
                 } else if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
 
                     showChannelList();
@@ -345,17 +302,6 @@ public class MainActivity extends AppCompatActivity {
 
             webView.setInitialScale(getMinimumScale());
             webView.loadUrl(liveUrls[currentLiveIndex]);
-            /*if(currentLiveIndex > 19000){
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(webView != null) {
-                            webView.setInitialScale(getMinimumScale());
-                            webView.reload();
-                        }
-                    }
-                }, 1000);
-            }*/
         }
     }
 
@@ -383,24 +329,6 @@ public class MainActivity extends AppCompatActivity {
         Log.d("scale", "scale: " + scale);
         // 四舍五入并转为整数
         return (int) Math.round(scale);
-    }
-
-    // 在需要模拟触摸的地方调用该方法
-    public void simulateTouch(View view, float x, float y) {
-        long downTime = SystemClock.uptimeMillis();
-        long eventTime = SystemClock.uptimeMillis() + 100;
-
-        // 构造 ACTION_DOWN 事件
-        MotionEvent downEvent = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_DOWN, x, y, 0);
-        view.dispatchTouchEvent(downEvent);
-
-        // 构造 ACTION_UP 事件
-        MotionEvent upEvent = MotionEvent.obtain(downTime, eventTime + 100, MotionEvent.ACTION_UP, x, y, 0);
-        view.dispatchTouchEvent(upEvent);
-
-        // 释放事件对象
-        downEvent.recycle();
-        upEvent.recycle();
     }
 
     @Override

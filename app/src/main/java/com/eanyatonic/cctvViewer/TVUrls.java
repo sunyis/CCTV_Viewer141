@@ -2,6 +2,7 @@ package com.eanyatonic.cctvViewer;
 
 public class TVUrls {
     public static String[] liveUrls = {
+            "https://www.yangshipin.cn/#/tv/home?pid=600001859",
             "https://tv.cctv.com/live/cctv1/",
             //"https://lizhiv.netlify.app/v.html?v=a/1",
             "https://tv.cctv.com/live/cctv2/",
@@ -47,6 +48,7 @@ public class TVUrls {
     };
 
     public static String[] channelNames = {
+            "1 CCTV-1 综合央视网",
             "1 CCTV-1 综合",
             "2 CCTV-2 财经",
             "3 CCTV-3 综艺",

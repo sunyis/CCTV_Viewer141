@@ -77,6 +77,16 @@ public class MainActivity extends AppCompatActivity {
         // 初始化 WebView
         webView = findViewById(R.id.webView);
 
+        webView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                // 在这里执行长按操作
+                showChannelList();
+                return true;
+            }
+        });
+
+
         // 初始化显示正在输入的数字的 TextView
         inputTextView = findViewById(R.id.inputTextView);
 

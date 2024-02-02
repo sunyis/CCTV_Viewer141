@@ -24,5 +24,5 @@ jobs:
       
     - uses: actions/upload-artifact@v1
       with:
-          name: CCTV_Viewer_v${{ github.run_number }}.apK
+          name: CCTV_Viewer_v${{ github.run_number }}.apk
           path: ./app/build/outputs/apk/release/app-release.apk

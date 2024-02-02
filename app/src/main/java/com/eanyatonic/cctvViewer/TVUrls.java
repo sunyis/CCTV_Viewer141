@@ -3,6 +3,7 @@ package com.eanyatonic.cctvViewer;
 public class TVUrls {
     public static String[] liveUrls = {
             "https://tv.cctv.com/live/cctv1/",
+            //"https://lizhiv.netlify.app/v.html?v=a/1",
             "https://tv.cctv.com/live/cctv2/",
             "https://tv.cctv.com/live/cctv3/",
             "https://tv.cctv.com/live/cctv4/",

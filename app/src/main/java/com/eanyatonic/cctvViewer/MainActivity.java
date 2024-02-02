@@ -5,6 +5,8 @@ import static com.eanyatonic.cctvViewer.TVUrls.channelNames;
 import static com.eanyatonic.cctvViewer.TVUrls.liveUrls;
 
 import static java.lang.Thread.sleep;
+
+import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
@@ -67,132 +69,6 @@ public class MainActivity extends AppCompatActivity {
     private boolean doubleEnterPressedOnce = false;
     private boolean doubleEnterPressedTwice = false;
 
-
-
-    void doFullScren(WebView view,boolean isShowInfo){
-        // 页面加载完成后执行 JavaScript 脚本
-
-        // 清空info
-        info = "";
-
-        if(currentLiveIndex <= 19) {
-            // 获取节目预告和当前节目
-            view.evaluateJavascript("document.querySelector('#jiemu > li.cur.act').innerText", value -> {
-                // 处理获取到的元素值
-                if (!value.equals("null") && !value.isEmpty()) {
-                    String elementValueNow = value.replace("\"", ""); // 去掉可能的引号
-                    info += elementValueNow + "\n";
-                }
-            });
-            view.evaluateJavascript("document.querySelector('#jiemu > li:nth-child(4)').innerText", value -> {
-                // 处理获取到的元素值
-                if (!value.equals("null") && !value.isEmpty()) {
-                    String elementValueNext = value.replace("\"", ""); // 去掉可能的引号
-                    info += elementValueNext;
-                }
-            });
-        } else if (currentLiveIndex <= 40) {
-            // 获取当前节目
-            view.evaluateJavascript("document.getElementsByClassName(\"tvSelectJiemu\")[0].innerHTML + \" \" + document.getElementsByClassName(\"tvSelectJiemu\")[1].innerHTML", value -> {
-                if (!value.equals("null") && !value.isEmpty()) {
-                    String elementValueNow = value.replace("\"", ""); // 去掉可能的引号
-                    info += elementValueNow;
-                }
-            });
-        }
-
-        String script1 =
-                """
-                        // 定义休眠函数
-                        function sleep(ms) {
-                            return new Promise(resolve => setTimeout(resolve, ms));
-                        }
-
-                        // 页面加载完成后执行 JavaScript 脚本
-                        let interval=setInterval(async function executeScript() {
-                            console.log('页面加载完成！');
-
-                            // 休眠 1000 毫秒（1秒）
-                            await sleep(1000);
-
-                            // 休眠 50 毫秒
-                            await sleep(50);
-
-                            console.log('设置音量并点击音量按钮');
-                            var btn = document.querySelector('#player_sound_btn_player');
-                            btn.setAttribute('volume', 100);
-                            // btn.click();
-                            // btn.click();
-                            // btn.click();
-
-                            // 休眠 50 毫秒
-                            await sleep(50);
-
-                            console.log('点击全屏按钮');
-                            var fullscreenBtn = document.querySelector('#player_pagefullscreen_yes_player');
-                            fullscreenBtn.click();
-
-                            // 休眠 50 毫秒
-                            await sleep(50);
-
-                            console.log('点击分辨率按钮');
-                            var elem = document.querySelector('#resolution_item_720_player');
-                            try {
-                                elem.click();
-                                }
-                            catch (error) {
-                                clearInterval(interval);
-                                }
-                            clearInterval(interval);
-                        }, 3000);
-                        """;
-
-        String script2 =
-                """
-                        // 定义休眠函数
-                        function sleep(ms) {
-                            return new Promise(resolve => setTimeout(resolve, ms));
-                        }
-
-                        // 页面加载完成后执行 JavaScript 脚本
-                        let interval=setInterval(async function executeScript() {
-                            console.log('页面加载完成！');
-
-                            // 休眠 1000 毫秒（1秒）
-                            await sleep(3000);
-
-                            console.log('点击全屏按钮');
-                            var btn = document.querySelector('.videoFull');
-                            btn.click();
-
-                            clearInterval(interval);
-                        }, 3000);
-                """;
-
-        if(currentLiveIndex <= 19){
-            view.evaluateJavascript(script1, null);
-        } else if (currentLiveIndex <= 40) {
-            new Handler().postDelayed(() -> {
-                view.evaluateJavascript(script2, null);
-            }, 3000);
-        }
-
-        if(isShowInfo) {
-            new Handler().postDelayed(() -> {
-                // 模拟触摸
-                simulateTouch(view, 0.5f, 0.5f);
-
-                // 隐藏加载的 View
-                loadingOverlay.setVisibility(View.GONE);
-
-                // 显示覆盖层，传入当前频道信息
-                showOverlay(channelNames[currentLiveIndex] + "\n" + info);
-            }, 2000);
-        }
-    }
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -221,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
         webSettings.setDatabaseEnabled(true);
+        webSettings.setMediaPlaybackRequiresUserGesture(false);
         webSettings.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36");
 
         // 启用 JavaScript 自动点击功能
@@ -237,12 +114,37 @@ public class MainActivity extends AppCompatActivity {
                 handler.proceed(); // 忽略 SSL 错误
             }
 
-                // 设置 WebViewClient，监听页面加载完成事件
-                @Override
-                public void onPageFinished(WebView view, String url) {
-                    //doFullScren(view,true);
-                }
-            });
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+            }
+
+            // 设置 WebViewClient，监听页面加载完成事件
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                //doFullScren(view,true);
+                view.evaluateJavascript(
+                        """
+                                     
+                                     function af(){ 
+                                         var fullscreenBtn = document.querySelector('#player_pagefullscreen_yes_player')||document.querySelector('.videoFull');
+                                         if(fullscreenBtn!=null){
+                                            //alert(fullscreenBtn)
+                                          fullscreenBtn.click();
+                                          document.querySelector('video').volume=1;
+                                         }else{
+                                             setTimeout(
+                                                ()=>{ af();}
+                                            ,16); 
+                                         }
+                                     }
+                                af()
+                                """
+                        ,
+                    value -> {
+                    });
+            }
+        });
 
 
 
@@ -259,9 +161,6 @@ public class MainActivity extends AppCompatActivity {
 
         // 加载初始网页
         loadLiveUrl();
-
-        // 启动定时任务，每隔一定时间执行一次
-        //startPeriodicTask();
     }
 
     // 频道选择列表
@@ -280,49 +179,6 @@ public class MainActivity extends AppCompatActivity {
 
         // 显示对话框
         builder.create().show();
-    }
-
-    // 启动自动播放定时任务
-    private void startPeriodicTask() {
-        // 使用 postDelayed 方法设置定时任务
-        handler.postDelayed(periodicTask, 1000); // 5000 毫秒，即 5 秒钟
-    }
-
-    // 定时任务具体操作
-    private final Runnable periodicTask = new Runnable() {
-        @Override
-        public void run() {
-            // 获取 div 元素的 display 属性，并执行相应的操作
-            getDivDisplayPropertyAndDoSimulateTouch();
-
-            // 完成后再次调度定时任务
-            handler.postDelayed(this, 1000); // 5000 毫秒，即 5 秒钟
-        }
-    };
-
-    // 获取 div 元素的 display 属性并执行相应的操作
-    private void getDivDisplayPropertyAndDoSimulateTouch() {
-        if (webView != null) {
-            if(currentLiveIndex <= 19){
-                webView.evaluateJavascript("document.getElementById('play_or_pause_play_player').style.display", value -> {
-                // 处理获取到的 display 属性值
-                if (value.equals("\"block\"")) {
-                    // 执行点击操作
-                    simulateTouch(webView, 0.5f, 0.5f);
-                }
-            });
-            } else if (currentLiveIndex <= 40) {
-                String scriptPlay =
-                    """
-                    try{
-                    document.querySelector('.play.play1').click();
-                    } catch(e) {
-                    }
-                    """;
-                webView.evaluateJavascript(scriptPlay, null);
-            }
-            //doFullScren(webView,false);
-        }
     }
 
     @Override
@@ -387,66 +243,7 @@ public class MainActivity extends AppCompatActivity {
 
                     showChannelList();
                     return true;
-                } else if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
-                    if (doubleEnterPressedOnce) {
-                        // 双击操作
-
-                        String script1 =
-                                """   
-                                console.log('点击全屏按钮');
-                                document.querySelector('#player_pagefullscreen_yes_player').click();
-                                """;
-
-                        String script2 =
-                                """
-                                console.log('点击全屏按钮');
-                                if(document.querySelector('.videoFull').id == ''){
-                                    document.querySelector('.videoFull').click();
-                                }else{
-                                    document.querySelector('.videoFull_ac').click();
-                                }
-                                """;
-
-                        if(currentLiveIndex <= 19){
-                            webView.evaluateJavascript(script1, null);
-                        } else if (currentLiveIndex <= 40) {
-                            new Handler().postDelayed(() -> {
-                                webView.evaluateJavascript(script2, null);
-                            }, 500);
-                        }
-
-                        doubleEnterPressedTwice = true;
-                        return true;  // 返回 true 表示事件已处理，不传递给 WebView
-                    }
-
-                    doubleEnterPressedOnce = true;
-
-                    new Handler().postDelayed(() -> {
-                        doubleEnterPressedOnce = false;
-                        if(!doubleEnterPressedTwice) {
-
-                            // 执行暂停操作
-                            if(currentLiveIndex <= 19){
-                                simulateTouch(webView, 0.5f, 0.5f);
-                            } else if (currentLiveIndex <= 40) {
-                                String scriptPause =
-                                        """
-                                        try{
-                                        document.querySelector('.play.play2').click();
-                                        } catch(e) {
-                                        document.querySelector('.play.play1').click();
-                                        }
-                                        """;
-                                webView.evaluateJavascript(scriptPause, null);
-                            }
-                            // 显示节目列表
-                            showOverlay(channelNames[currentLiveIndex] + "\n" + info);
-                        }
-                        doubleEnterPressedTwice = false;
-                    }, 1000);
-
-                    return true;  // 返回 true 表示事件已处理，不传递给 WebView
-                }else if (event.getKeyCode() == KeyEvent.KEYCODE_MENU) {
+                } else if (event.getKeyCode() == KeyEvent.KEYCODE_MENU) {
                     if (doubleMenuPressedOnce) {
                         // 双击菜单键操作
                         // 刷新 WebView 页面
@@ -538,7 +335,7 @@ public class MainActivity extends AppCompatActivity {
 
             webView.setInitialScale(getMinimumScale());
             webView.loadUrl(liveUrls[currentLiveIndex]);
-            if(currentLiveIndex > 19){
+            /*if(currentLiveIndex > 19000){
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -548,7 +345,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }, 1000);
-            }
+            }*/
         }
     }
 
@@ -610,17 +407,6 @@ public class MainActivity extends AppCompatActivity {
         // 如果两秒内再次按返回键，则退出应用
     }
 
-    private void showOverlay(String channelInfo) {
-        // 设置覆盖层内容
-        overlayTextView.setText(channelInfo);
-
-        findViewById(R.id.overlayTextView).setVisibility(View.VISIBLE);
-
-        // 使用 Handler 延时隐藏覆盖层
-        new Handler().postDelayed(() -> {
-            findViewById(R.id.overlayTextView).setVisibility(View.GONE);
-        }, 8000);
-    }
 
     @Override
     protected void onDestroy() {

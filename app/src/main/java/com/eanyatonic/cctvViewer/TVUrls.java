@@ -50,7 +50,7 @@ public class TVUrls {
 
     public static String[] channelNames = {
             "reload",
-            "1 CCTV-1 综合央视网",
+            "1 CCTV-1 综合央视频",
             "1 CCTV-1 综合",
             "2 CCTV-2 财经",
             "3 CCTV-3 综艺",

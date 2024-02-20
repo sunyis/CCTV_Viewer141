@@ -2,9 +2,7 @@
 
 
 ## 下载安装包
-从Github Release下载：https://github.com/Eanya-Tonic/CCTV_Viewer/releases/latest
-<br>
-从百度网盘下载：https://pan.baidu.com/s/1e5wMCorJIp9oi5yN8mJ1KA?pwd=qozp 提取码：qozp
+从Github Release下载：https://github.com/matrix3d/CCTV_Viewer/releases
 
 ## 演示视频
 **B站：**
@@ -14,13 +12,8 @@
 [央视浏览器——一款支持遥控器的便捷电视直播观看软件](https://www.bilibili.com/video/BV1Cg4y1r7Hv)
 
 ## 使用方法
-**电视盒子：**
 
-使用上下键切换频道，使用左右键缩放当前页面，使用确认键显示当前频道和节目信息，双击确认键切换全屏，单击菜单键显示频道切换列表，双击菜单键刷新页面，输入数字键换到指定台，双击返回键退出程序。
-
-**其他设备：**
-
-使用键盘方向键上下控制切换频道，使用键盘方向键左右键缩放当前页面，使用Enter键显示当前频道和节目信息，双击Enter键显示切换全屏，输入数字键换到指定台。
+长按屏幕，或确定键弹出菜单
 
 ## 更新日志
 **v1.4 更新日志（2024.01.21）**

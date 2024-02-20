@@ -125,7 +125,8 @@ public class MainActivity extends AppCompatActivity {
                                          if(fullscreenBtn!=null){
                                             //alert(fullscreenBtn)
                                           fullscreenBtn.click();
-                                          document.querySelector('video').volume=1;
+                                        var video=document.querySelector('video');
+                                          video.volume=1;
                                           //alert(window.location.href);
 
                                             if(document.querySelector('.vjs-fullscreen-control')!=null){
@@ -136,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
                                         				video.style.width = '100%';
                                         				video.style.height = '100%';
                                         				video.style.zIndex = '9999';
+												        video.style.objectFit= 'contain'; /* 保持宽高比，视频铺满容器 */
                                         				const aspectRatio = video.videoWidth / video.videoHeight;
                                         				const screenRatio = window.innerWidth / window.innerHeight;
                                         				//alert(video.videoWidth +"",""+ video.videoHeight+window.innerWidth +"",""+ window.innerHeight);

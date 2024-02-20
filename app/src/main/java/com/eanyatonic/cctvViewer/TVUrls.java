@@ -46,6 +46,7 @@ public class TVUrls {
             "https://www.yangshipin.cn/?a=19#/tv/home?pid=600002532",
             "https://www.yangshipin.cn/?a=20#/tv/home?pid=600002493",
             "https://www.yangshipin.cn/?a=21#/tv/home?pid=600002513",
+            "https://www.gdtv.cn/tvChannelDetail/51",
     };
 
     public static String[] channelNames = {
@@ -92,5 +93,6 @@ public class TVUrls {
             "39 安徽卫视",
             "40 河北卫视",
             "41 山东卫视",
+            "42 大湾区卫视",
     };
 }

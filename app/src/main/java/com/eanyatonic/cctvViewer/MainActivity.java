@@ -137,7 +137,8 @@ public class MainActivity extends AppCompatActivity {
                                         				video.style.width = '100%';
                                         				video.style.height = '100%';
                                         				video.style.zIndex = '9999';
-												        video.style.objectFit= 'contain'; /* 保持宽高比，视频铺满容器 */
+									video.style.objectFit= 'contain'; /* 保持宽高比，视频铺满容器 */
+									video.style.backgroundColor= 'black'; /* 背景颜色可以根据需要更改 */
                                         				const aspectRatio = video.videoWidth / video.videoHeight;
                                         				const screenRatio = window.innerWidth / window.innerHeight;
                                         				//alert(video.videoWidth +"",""+ video.videoHeight+window.innerWidth +"",""+ window.innerHeight);

@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                         """
                                      
                                      function af(){ 
-                                         var fullscreenBtn = document.querySelector('#player_pagefullscreen_yes_player')||document.querySelector('.videoFull');
+                                         var fullscreenBtn = document.querySelector('#player_pagefullscreen_yes_player')||document.querySelector('.videoFull')||document.querySelector('.vjs-fullscreen-control');
                                          if(fullscreenBtn!=null){
                                             //alert(fullscreenBtn)
                                           fullscreenBtn.click();

@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean doubleMenuPressedOnce = false;
     private boolean doubleMenuPressedTwice = false;
+
+    final int[] g = {0,0};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -197,7 +199,6 @@ public class MainActivity extends AppCompatActivity {
         var ldad2=new ArrayAdapter<>(this, R.layout.custom_list_item,arr2);
         lv2.setAdapter(ldad2);
 
-        final int[] g = {0};
         lv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -243,7 +244,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //Toast.makeText(getApplicationContext(),"click"+i+","+l,Toast.LENGTH_SHORT).show();
-                loadLiveUrl(g[0],i);
+                g[1]=i;
+                loadLiveUrl(g[0],g[1]);
+                restartHideTimer();
             }
         });
         lv.setVisibility(View.GONE);
@@ -300,11 +303,13 @@ public class MainActivity extends AppCompatActivity {
             if (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN || event.getKeyCode() == KeyEvent.KEYCODE_ENTER || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER || event.getKeyCode() == KeyEvent.KEYCODE_MENU || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
                 if (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
                     // 执行上一个直播地址的操作
-                    navigateToPreviousLive();
+                    navigateLive(-1);
+                    //navigateToPreviousLive();
                     return true;  // 返回 true 表示事件已处理，不传递给 WebView
                 } else if (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
                     // 执行下一个直播地址的操作
-                    navigateToNextLive();
+                    navigateLive(1);
+                    //navigateToNextLive();
                     return true;  // 返回 true 表示事件已处理，不传递给 WebView
                 } else if(event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT){
                 }else if(event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT){
@@ -346,11 +351,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void loadLastLiveIndex() {
+    /*private void loadLastLiveIndex() {
         SharedPreferences preferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         //currentLiveIndex = preferences.getInt(PREF_KEY_LIVE_INDEX, 0); // 默认值为0
         loadLiveUrl(0,0); // 加载上次保存的位置的直播地址
-    }
+    }*/
 
     private void saveCurrentLiveIndex() {
         SharedPreferences preferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -361,7 +366,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void loadLiveUrl(int g,int i) {
-        restartHideTimer();
+        //restartHideTimer();
         //if (currentLiveIndex >= 0 && currentLiveIndex < liveUrls.length) {
             webView.setInitialScale(getMinimumScale());
             var url=TVUrls.liveUrls2[g].tvUrls[i].url;//  liveUrls[currentLiveIndex];
@@ -389,17 +394,39 @@ public class MainActivity extends AppCompatActivity {
         //}
     }
 
-    private void navigateToPreviousLive() {
+    private void navigateLive(int adder) {
         //currentLiveIndex = (currentLiveIndex - 1 + liveUrls.length) % liveUrls.length;
-        loadLiveUrl(0,0);
+        var g0=g[0];
+        var i=g[1]+adder;
+        var cururl=TVUrls.liveUrls2[g[0]];
+        if(adder>0){
+            if(i>=cururl.tvUrls.length){
+                g0++;
+                i=0;
+                if(g0>=TVUrls.liveUrls2.length){
+                    return;
+                }
+            }
+        }else {
+            if(i<0){
+                g0--;
+                if(g0<0){
+                    return;
+                }
+                i=TVUrls.liveUrls2[g0].tvUrls.length-1;
+            }
+        }
+        g[0]=g0;
+        g[1]=i;
+        loadLiveUrl(g0,i);
         saveCurrentLiveIndex(); // 保存当前位置
     }
 
-    private void navigateToNextLive() {
+    //private void navigateToNextLive() {
         ///currentLiveIndex = (currentLiveIndex + 1) % liveUrls.length;
-        loadLiveUrl(0,0);
-        saveCurrentLiveIndex(); // 保存当前位置
-    }
+    //    loadLiveUrl(0,0);
+    //    saveCurrentLiveIndex(); // 保存当前位置
+    //}
 
     private int getMinimumScale() {
         DisplayMetrics displayMetrics = new DisplayMetrics();

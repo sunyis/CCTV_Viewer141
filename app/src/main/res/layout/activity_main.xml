@@ -34,6 +34,7 @@
             android:id="@+id/list0"
             android:layout_width="180dp"
             android:layout_height="match_parent"
+            android:background="#80000000"
             tools:visibility="gone">
 
         </ListView>
@@ -42,6 +43,7 @@
             android:id="@+id/list1"
             android:layout_width="180dp"
             android:layout_height="match_parent"
+            android:background="#80000000"
             tools:visibility="gone" />
     </LinearLayout>
 

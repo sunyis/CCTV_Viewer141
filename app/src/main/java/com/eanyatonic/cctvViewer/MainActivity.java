@@ -221,7 +221,6 @@ public class MainActivity extends AppCompatActivity {
                 //Toast.makeText(getApplicationContext(),"b",Toast.LENGTH_SHORT).show();
             }
         });
-
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

@@ -55,7 +55,28 @@ public class TVUrls {
     }),
             new TVUrlGroup("荔枝网", new TVUrl[
                     ]{
+                    new TVUrl("广东卫视","https://www.gdtv.cn/tvChannelDetail/43"),
+                    new TVUrl("广东珠江","https://www.gdtv.cn/tvChannelDetail/44"),
+                    new TVUrl("广东新闻","https://www.gdtv.cn/tvChannelDetail/45"),
+                    new TVUrl("广东民生","https://www.gdtv.cn/tvChannelDetail/48"),
+                    new TVUrl("广东体育","https://www.gdtv.cn/tvChannelDetail/47"),
                     new TVUrl("大湾区卫视","https://www.gdtv.cn/tvChannelDetail/51"),
+                    new TVUrl("大湾区卫视海外","https://www.gdtv.cn/tvChannelDetail/46"),
+                    new TVUrl("经济科教","https://www.gdtv.cn/tvChannelDetail/49"),
+                    new TVUrl("广东影视","https://www.gdtv.cn/tvChannelDetail/53"),
+                    new TVUrl("4k超高清","https://www.gdtv.cn/tvChannelDetail/16"),
+                    new TVUrl("广东少儿","https://www.gdtv.cn/tvChannelDetail/54"),
+                    new TVUrl("嘉佳卡通","https://www.gdtv.cn/tvChannelDetail/66"),
+                    new TVUrl("南方购物","https://www.gdtv.cn/tvChannelDetail/42"),
+                    new TVUrl("岭南戏曲","https://www.gdtv.cn/tvChannelDetail/15"),
+                    new TVUrl("现代教育","https://www.gdtv.cn/tvChannelDetail/13"),
+                    new TVUrl("广东移动","https://www.gdtv.cn/tvChannelDetail/74"),
+                    new TVUrl("荔枝台","https://www.gdtv.cn/tvChannelDetail/100"),
+                    new TVUrl("纪录片","https://www.gdtv.cn/tvChannelDetail/94"),
+                    new TVUrl("GRTN健康频道","https://www.gdtv.cn/tvChannelDetail/99"),
+                    new TVUrl("GRTN文化频道","https://www.gdtv.cn/tvChannelDetail/75"),
+                    new TVUrl("GRTN生活频道","https://www.gdtv.cn/tvChannelDetail/102"),
+                    new TVUrl("GRTN教育频道","https://www.gdtv.cn/tvChannelDetail/104"),
             })
     };
 

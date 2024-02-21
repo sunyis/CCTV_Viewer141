@@ -201,6 +201,7 @@ public class MainActivity extends AppCompatActivity {
         lv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                restartHideTimer();
                 //Toast.makeText(getApplicationContext(),"a"+i+","+l,Toast.LENGTH_SHORT).show();
                 // 更新数据源
                 ldad2.clear();
@@ -223,7 +224,18 @@ public class MainActivity extends AppCompatActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                restartHideTimer();
                 //lv2.setSelected(true);
+
+                ldad2.clear();
+                g[0] =i;
+                var urlg =TVUrls.liveUrls2[i];
+                for (var a: urlg.tvUrls
+                ) {
+                    ldad2.add(a.name);
+                }
+                // 通知适配器数据已更改
+                ldad2.notifyDataSetChanged();
             }
         });
 
@@ -349,6 +361,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void loadLiveUrl(int g,int i) {
+        restartHideTimer();
         //if (currentLiveIndex >= 0 && currentLiveIndex < liveUrls.length) {
             webView.setInitialScale(getMinimumScale());
             var url=TVUrls.liveUrls2[g].tvUrls[i].url;//  liveUrls[currentLiveIndex];

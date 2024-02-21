@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "央视浏览器"
+rootProject.name = "视频浏览器"
 include ':app'

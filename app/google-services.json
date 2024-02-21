@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "334638285031",
+    "project_id": "tvview-7f358",
+    "storage_bucket": "tvview-7f358.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:334638285031:android:9ea8ed5f5ab396f2a32242",
+        "android_client_info": {
+          "package_name": "com.eanyatonic.cctvViewer.my"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbU7Kwy0Z97ahAX-Cj5bSTNFtvhZlYTw0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

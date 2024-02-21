@@ -40,7 +40,7 @@ public class TVUrls {
             new TVUrl("CCTV-6 电影","https://tv.cctv.com/live/cctv6/"),
             new TVUrl("CCTV-7 军事农业","https://tv.cctv.com/live/cctv7/"),
             new TVUrl("CCTV-8 电视剧","https://tv.cctv.com/live/cctv8/"),
-            new TVUrl("CCTV-9 纪录","https://tv.cctv.com/live/cctv9/"),
+            new TVUrl("CCTV-9 纪录","https://tv.cctv.com/live/cctvjilu/"),
             new TVUrl("CCTV-10 科教","https://tv.cctv.com/live/cctv10/"),
             new TVUrl("CCTV-11 戏曲","https://tv.cctv.com/live/cctv11/"),
             new TVUrl("CCTV-12 社会与法","https://tv.cctv.com/live/cctv12/"),

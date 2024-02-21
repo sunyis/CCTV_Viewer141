@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
     //private int currentLiveIndex=1;
 
     private static final String PREF_NAME = "MyPreferences";
-    private static final String PREF_KEY_LIVE_INDEX = "currentLiveIndex";
 
     private boolean doubleBackToExitPressedOnce = false;
 
@@ -79,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
         // 初始化 WebView
         webView = findViewById(R.id.webView);
+        var ua= webView.getSettings().getUserAgentString();
         // 直接传入函数
         webView.addJavascriptInterface(new Object() {
 
@@ -211,21 +211,11 @@ public class MainActivity extends AppCompatActivity {
         var ldad2=new ArrayAdapter<>(this, R.layout.custom_list_item,arr2);
         lv2.setAdapter(ldad2);
 
+
         lv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                restartHideTimer();
-                //Toast.makeText(getApplicationContext(),"a"+i+","+l,Toast.LENGTH_SHORT).show();
-                // 更新数据源
-                ldad2.clear();
-                g[0] =i;
-                var urlg =TVUrls.liveUrls2[i];
-                for (var a: urlg.tvUrls
-                     ) {
-                    ldad2.add(a.name);
-                }
-                // 通知适配器数据已更改
-                ldad2.notifyDataSetChanged();
+                updateList2(ldad2,i);
             }
 
             @Override
@@ -236,18 +226,7 @@ public class MainActivity extends AppCompatActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                restartHideTimer();
-                //lv2.setSelected(true);
-
-                ldad2.clear();
-                g[0] =i;
-                var urlg =TVUrls.liveUrls2[i];
-                for (var a: urlg.tvUrls
-                ) {
-                    ldad2.add(a.name);
-                }
-                // 通知适配器数据已更改
-                ldad2.notifyDataSetChanged();
+                updateList2(ldad2,i);
             }
         });
 
@@ -260,10 +239,26 @@ public class MainActivity extends AppCompatActivity {
                 restartHideTimer();
             }
         });
-        lv.setVisibility(View.GONE);
-        lv2.setVisibility(View.GONE);
+        //lv.setVisibility(View.GONE);
+        //lv2.setVisibility(View.GONE);
+        findViewById(R.id.menu).setVisibility(View.GONE);
         // 初始化 Handler
         handler = new Handler(getMainLooper());
+    }
+
+    private void updateList2(ArrayAdapter ldad2, int i){
+        restartHideTimer();
+        //Toast.makeText(getApplicationContext(),"a"+i+","+l,Toast.LENGTH_SHORT).show();
+        // 更新数据源
+        ldad2.clear();
+        g[0] =i;
+        var urlg =TVUrls.liveUrls2[i];
+        for (var a: urlg.tvUrls
+        ) {
+            ldad2.add(a.name);
+        }
+        // 通知适配器数据已更改
+        ldad2.notifyDataSetChanged();
     }
 
     // 重置隐藏计时器
@@ -273,16 +268,14 @@ public class MainActivity extends AppCompatActivity {
         Log.d("aaaaa", "restartHideTimer: ");
         // 延迟一段时间后隐藏 ListView
         handler.postDelayed(() -> {
-            findViewById(R.id.list0).setVisibility(View.GONE);
-            findViewById(R.id.list1).setVisibility(View.GONE);
+            findViewById(R.id.menu).setVisibility(View.GONE);
         }, HIDE_DELAY);
     }
 
     // 频道选择列表
     private void showChannelList() {
-        findViewById(R.id.list0).setVisibility(View.VISIBLE);
-        findViewById(R.id.list1).setVisibility(View.VISIBLE);
-        findViewById(R.id.list0).requestFocus();
+        findViewById(R.id.menu).setVisibility(View.VISIBLE);
+        //findViewById(R.id.list0).requestFocus();
         restartHideTimer();
         // 构建频道列表对话框
         /*AlertDialog.Builder builder = new AlertDialog.Builder(this);

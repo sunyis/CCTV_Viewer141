@@ -3,5 +3,6 @@
     <style name="Theme.央视浏览器" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@android:color/black</item>
     </style>
 </resources>

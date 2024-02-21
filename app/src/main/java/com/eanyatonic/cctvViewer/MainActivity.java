@@ -1,8 +1,6 @@
 package com.eanyatonic.cctvViewer;
 
 import static com.eanyatonic.cctvViewer.FileUtils.copyAssets;
-import static com.eanyatonic.cctvViewer.TVUrls.channelNames;
-import static com.eanyatonic.cctvViewer.TVUrls.liveUrls;
 
 import static java.lang.Thread.sleep;
 
@@ -28,12 +26,16 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -41,11 +43,13 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final static long HIDE_DELAY = 5000; // 5 秒钟没有操作后隐藏
+    private Handler handler;
     private WebView webView; // 导入 X5 WebView
 
 
 
-    private int currentLiveIndex=1;
+    //private int currentLiveIndex=1;
 
     private static final String PREF_NAME = "MyPreferences";
     private static final String PREF_KEY_LIVE_INDEX = "currentLiveIndex";
@@ -174,13 +178,88 @@ public class MainActivity extends AppCompatActivity {
 
         //webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         // 加载初始网页
-        loadLiveUrl();
+        loadLiveUrl(0,0);
+
+        //列表
+        ListView lv=findViewById(R.id.list0);
+        var arr=new String[TVUrls.liveUrls2.length];
+        for (var i=0;i<arr.length;i++){
+            arr[i]=TVUrls.liveUrls2[i].name;
+        }
+        var ldad=new ArrayAdapter<>(this,
+                //android.R.layout.simple_list_item_1
+                R.layout.custom_list_item
+                ,arr);
+        lv.setAdapter(ldad);
+
+        ListView lv2=findViewById(R.id.list1);
+        var arr2=new ArrayList<String>();
+        var ldad2=new ArrayAdapter<>(this, R.layout.custom_list_item,arr2);
+        lv2.setAdapter(ldad2);
+
+        final int[] g = {0};
+        lv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                //Toast.makeText(getApplicationContext(),"a"+i+","+l,Toast.LENGTH_SHORT).show();
+                // 更新数据源
+                ldad2.clear();
+                g[0] =i;
+                var urlg =TVUrls.liveUrls2[i];
+                for (var a: urlg.tvUrls
+                     ) {
+                    ldad2.add(a.name);
+                }
+                // 通知适配器数据已更改
+                ldad2.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                //Toast.makeText(getApplicationContext(),"b",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //lv2.setSelected(true);
+            }
+        });
+
+        lv2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //Toast.makeText(getApplicationContext(),"click"+i+","+l,Toast.LENGTH_SHORT).show();
+                loadLiveUrl(g[0],i);
+            }
+        });
+        lv.setVisibility(View.GONE);
+        lv2.setVisibility(View.GONE);
+        // 初始化 Handler
+        handler = new Handler(getMainLooper());
+    }
+
+    // 重置隐藏计时器
+    private void restartHideTimer() {
+        // 移除之前的隐藏任务
+        handler.removeCallbacksAndMessages(null);
+        Log.d("aaaaa", "restartHideTimer: ");
+        // 延迟一段时间后隐藏 ListView
+        handler.postDelayed(() -> {
+            findViewById(R.id.list0).setVisibility(View.GONE);
+            findViewById(R.id.list1).setVisibility(View.GONE);
+        }, HIDE_DELAY);
     }
 
     // 频道选择列表
     private void showChannelList() {
+        findViewById(R.id.list0).setVisibility(View.VISIBLE);
+        findViewById(R.id.list1).setVisibility(View.VISIBLE);
+        findViewById(R.id.list0).requestFocus();
+        restartHideTimer();
         // 构建频道列表对话框
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        /*AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("选择频道");
         // 设置频道列表项
         builder.setItems(channelNames, (dialog, which) -> {
@@ -189,17 +268,22 @@ public class MainActivity extends AppCompatActivity {
             }else {
                 // 在此处处理选择的频道
                 currentLiveIndex = which;
-                loadLiveUrl();
+                loadLiveUrl(0,0);
                 saveCurrentLiveIndex(); // 保存当前位置
             }
         });
 
         // 显示对话框
-        builder.create().show();
+        builder.create().show();*/
     }
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
+        // 重置隐藏计时器
+        restartHideTimer();
+        if(findViewById(R.id.list0).getVisibility()==View.VISIBLE){
+            return super.dispatchKeyEvent(event);
+        }
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             if (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN || event.getKeyCode() == KeyEvent.KEYCODE_ENTER || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER || event.getKeyCode() == KeyEvent.KEYCODE_MENU || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
                 if (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
@@ -252,22 +336,22 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadLastLiveIndex() {
         SharedPreferences preferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        currentLiveIndex = preferences.getInt(PREF_KEY_LIVE_INDEX, 0); // 默认值为0
-        loadLiveUrl(); // 加载上次保存的位置的直播地址
+        //currentLiveIndex = preferences.getInt(PREF_KEY_LIVE_INDEX, 0); // 默认值为0
+        loadLiveUrl(0,0); // 加载上次保存的位置的直播地址
     }
 
     private void saveCurrentLiveIndex() {
         SharedPreferences preferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(PREF_KEY_LIVE_INDEX, currentLiveIndex);
+        //editor.putInt(PREF_KEY_LIVE_INDEX, currentLiveIndex);
         editor.apply();
     }
 
 
-    private void loadLiveUrl() {
-        if (currentLiveIndex >= 0 && currentLiveIndex < liveUrls.length) {
+    private void loadLiveUrl(int g,int i) {
+        //if (currentLiveIndex >= 0 && currentLiveIndex < liveUrls.length) {
             webView.setInitialScale(getMinimumScale());
-            var url=liveUrls[currentLiveIndex];
+            var url=TVUrls.liveUrls2[g].tvUrls[i].url;//  liveUrls[currentLiveIndex];
             webView.loadUrl(url);
             if(url.startsWith("https://www.yangshipin.cn")) {
                 ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -289,18 +373,18 @@ public class MainActivity extends AppCompatActivity {
                 scheduler.schedule(task, delay, TimeUnit.MILLISECONDS);
                 scheduler.shutdown();
             }
-        }
+        //}
     }
 
     private void navigateToPreviousLive() {
-        currentLiveIndex = (currentLiveIndex - 1 + liveUrls.length) % liveUrls.length;
-        loadLiveUrl();
+        //currentLiveIndex = (currentLiveIndex - 1 + liveUrls.length) % liveUrls.length;
+        loadLiveUrl(0,0);
         saveCurrentLiveIndex(); // 保存当前位置
     }
 
     private void navigateToNextLive() {
-        currentLiveIndex = (currentLiveIndex + 1) % liveUrls.length;
-        loadLiveUrl();
+        ///currentLiveIndex = (currentLiveIndex + 1) % liveUrls.length;
+        loadLiveUrl(0,0);
         saveCurrentLiveIndex(); // 保存当前位置
     }
 

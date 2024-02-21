@@ -24,39 +24,26 @@
         android:textColor="#FFFFFF"
         android:background="#80000000"/>
 
-    <TextView
-        android:id="@+id/overlayTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp"
-        android:textSize="24sp"
-        android:textColor="#FFFFFF"
-        android:padding="16dp"
-        android:gravity="center"
-        android:background="@drawable/rounded_background"
-        android:visibility="gone" />
-
-
-
-    <RelativeLayout
-        android:id="@+id/loadingOverlay"
+    <LinearLayout
+        android:id="@+id/menu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#E0000000"
-        android:visibility="gone">
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/loadingText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="#FFFFFF"
-            android:textSize="36sp"
-            android:text="正在切换频道..."
-            android:layout_marginBottom="16dp"/>
+        <ListView
+            android:id="@+id/list0"
+            android:layout_width="180dp"
+            android:layout_height="match_parent"
+            tools:visibility="gone">
 
-    </RelativeLayout>
+        </ListView>
+
+        <ListView
+            android:id="@+id/list1"
+            android:layout_width="180dp"
+            android:layout_height="match_parent"
+            tools:visibility="gone" />
+    </LinearLayout>
+
 
 </RelativeLayout>

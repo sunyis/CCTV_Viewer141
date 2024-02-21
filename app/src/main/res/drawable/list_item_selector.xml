@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true" android:drawable="@android:color/darker_gray" /> <!-- 按下时的效果 -->
+    <item android:state_activated="true" android:drawable="@android:color/darker_gray" /> <!-- 选中时的效果 -->
+    <item android:drawable="@android:color/transparent" /> <!-- 默认状态 -->
+</selector>

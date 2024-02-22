@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean doubleMenuPressedTwice = false;
 
     final int[] g = {0,0};
+    String ua;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
         // 初始化 WebView
         webView = findViewById(R.id.webView);
-        var ua= webView.getSettings().getUserAgentString();
+        ua= webView.getSettings().getUserAgentString();
         // 直接传入函数
         webView.addJavascriptInterface(new Object() {
 
@@ -245,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         ListView lv3=findViewById(R.id.list2);
-        var arr3=new String[]{"刷新","添加自定义"};
+        var arr3=new String[]{"刷新","添加自定义","关于"};
         var ldad3=new ArrayAdapter<>(this,
                 //android.R.layout.simple_list_item_1
                 R.layout.custom_list_item
@@ -294,6 +295,18 @@ public class MainActivity extends AppCompatActivity {
                         });
 
                         builder.show();
+                        break;
+                    case 2:
+                        AlertDialog.Builder builder2 = new AlertDialog.Builder(cxt);
+                        builder2.setTitle("关于");
+                        builder2.setMessage(""+ua+"\n\nhttps://github.com/matrix3d/CCTV_Viewer");
+                        builder2.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // 点击确定按钮后的操作
+                                dialog.dismiss(); // 关闭对话框
+                            }
+                        });
+                        builder2.show();
                         break;
                 }
                 restartHideTimer();

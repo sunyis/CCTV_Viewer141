@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TVUrls.loadFromJson(TVUrls.defJson);
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
@@ -253,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
         ldad2.clear();
         g[0] =i;
         var urlg =TVUrls.liveUrls2[i];
-        for (var a: urlg.tvUrls
+        for (var a: urlg.getTvUrls()
         ) {
             ldad2.add(a.name);
         }
@@ -373,7 +374,7 @@ public class MainActivity extends AppCompatActivity {
         //restartHideTimer();
         //if (currentLiveIndex >= 0 && currentLiveIndex < liveUrls.length) {
             webView.setInitialScale(getMinimumScale());
-            var url=TVUrls.liveUrls2[g].tvUrls[i].url;//  liveUrls[currentLiveIndex];
+            var url=TVUrls.liveUrls2[g].getTvUrls()[i].url;//  liveUrls[currentLiveIndex];
             webView.loadUrl(url);
             if(url.startsWith("https://www.yangshipin.cn")) {
                 ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -404,7 +405,7 @@ public class MainActivity extends AppCompatActivity {
         var i=g[1]+adder;
         var cururl=TVUrls.liveUrls2[g[0]];
         if(adder>0){
-            if(i>=cururl.tvUrls.length){
+            if(i>=cururl.getTvUrls().length){
                 g0++;
                 i=0;
                 if(g0>=TVUrls.liveUrls2.length){
@@ -417,7 +418,7 @@ public class MainActivity extends AppCompatActivity {
                 if(g0<0){
                     return;
                 }
-                i=TVUrls.liveUrls2[g0].tvUrls.length-1;
+                i=TVUrls.liveUrls2[g0].getTvUrls().length-1;
             }
         }
         g[0]=g0;

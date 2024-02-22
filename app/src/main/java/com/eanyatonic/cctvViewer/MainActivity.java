@@ -1,8 +1,5 @@
 package com.eanyatonic.cctvViewer;
 
-import static com.eanyatonic.cctvViewer.FileUtils.copyAssets;
-
-import static java.lang.Thread.sleep;
 
 import android.graphics.Bitmap;
 import android.net.http.SslError;

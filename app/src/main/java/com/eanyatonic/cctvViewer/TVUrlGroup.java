@@ -1,21 +1,31 @@
 package com.eanyatonic.cctvViewer;
 
+import java.util.ArrayList;
+
 public class TVUrlGroup {
     public String name;
-    private TVUrl[] tvUrls;
-    public  TVUrlGroup(String name,TVUrl[] tvUrls){
+    private ArrayList<TVUrl> tvUrls;
+    public  TVUrlGroup(String name,ArrayList<TVUrl> tvUrls){
         this.name=name;
         this.tvUrls=tvUrls;
     }
 
-    public TVUrl[] getTvUrls(){
+    public ArrayList<TVUrl> getTvUrls(){
         if(tvUrls==null){
-            tvUrls=new TVUrl[url.length/2];
+            tvUrls=new ArrayList<TVUrl>();
             for(var i=0;i<url.length;i+=2){
-                tvUrls[i/2]=new TVUrl(url[i],url[i+1]);
+                tvUrls.add(new TVUrl(url[i],url[i+1]));
             }
         }
         return tvUrls;
+    }
+
+    public void toUrl(){
+        url=new String[tvUrls.size()*2];
+        for(var i=0;i<tvUrls.size();i++){
+            url[i*2]=tvUrls.get(i).name;
+            url[i*2+1]=tvUrls.get(i).url;
+        }
     }
 
     public String[] url;

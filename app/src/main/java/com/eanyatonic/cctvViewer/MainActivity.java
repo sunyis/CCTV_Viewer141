@@ -1,9 +1,11 @@
 package com.eanyatonic.cctvViewer;
 
 
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
@@ -25,6 +27,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +36,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TVUrls.loadFromJson(TVUrls.defJson);
+        TVUrls.loadFromJson(TVUrls.defJson,getSharedPreferences("array_key", Context.MODE_PRIVATE));
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
@@ -238,6 +242,64 @@ public class MainActivity extends AppCompatActivity {
                 restartHideTimer();
             }
         });
+
+
+        ListView lv3=findViewById(R.id.list2);
+        var arr3=new String[]{"刷新","添加自定义"};
+        var ldad3=new ArrayAdapter<>(this,
+                //android.R.layout.simple_list_item_1
+                R.layout.custom_list_item
+                ,arr3);
+        lv3.setAdapter(ldad3);
+        var cxt=this;
+        lv3.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //Toast.makeText(getApplicationContext(),"click"+i+","+l,Toast.LENGTH_SHORT).show();
+                switch (i){
+                    case 0:
+                        webView.reload();
+                        break;
+                    case 1:
+                        AlertDialog.Builder builder = new AlertDialog.Builder(cxt);
+                        builder.setTitle("输入框视频地址");
+
+                        final EditText input = new EditText(cxt);
+                        builder.setView(input);
+
+                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String userInput = input.getText().toString();
+                                // 在这里处理用户输入
+                                var cusg=TVUrls.liveUrls2[TVUrls.liveUrls2.length-1];
+                                cusg.getTvUrls().add(new TVUrl(userInput,userInput));
+                                cusg.toUrl();
+                                // 保存数组到SharedPreferences
+                                SharedPreferences preferences = getSharedPreferences("array_key", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.apply();
+                                Gson gson = new Gson();
+                                String json = gson.toJson(cusg);
+                                editor.putString("array_key", json);
+                                editor.apply();
+                            }
+                        });
+
+                        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+
+                        builder.show();
+                        break;
+                }
+                restartHideTimer();
+            }
+        });
+
         //lv.setVisibility(View.GONE);
         //lv2.setVisibility(View.GONE);
         findViewById(R.id.menu).setVisibility(View.GONE);
@@ -372,7 +434,7 @@ public class MainActivity extends AppCompatActivity {
         //restartHideTimer();
         //if (currentLiveIndex >= 0 && currentLiveIndex < liveUrls.length) {
             webView.setInitialScale(getMinimumScale());
-            var url=TVUrls.liveUrls2[g].getTvUrls()[i].url;//  liveUrls[currentLiveIndex];
+            var url=TVUrls.liveUrls2[g].getTvUrls().get(i).url;//  liveUrls[currentLiveIndex];
             webView.loadUrl(url);
             if(url.startsWith("https://www.yangshipin.cn")) {
                 ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -403,7 +465,7 @@ public class MainActivity extends AppCompatActivity {
         var i=g[1]+adder;
         var cururl=TVUrls.liveUrls2[g[0]];
         if(adder>0){
-            if(i>=cururl.getTvUrls().length){
+            if(i>=cururl.getTvUrls().size()){
                 g0++;
                 i=0;
                 if(g0>=TVUrls.liveUrls2.length){
@@ -416,7 +478,7 @@ public class MainActivity extends AppCompatActivity {
                 if(g0<0){
                     return;
                 }
-                i=TVUrls.liveUrls2[g0].getTvUrls().length-1;
+                i=TVUrls.liveUrls2[g0].getTvUrls().size()-1;
             }
         }
         g[0]=g0;

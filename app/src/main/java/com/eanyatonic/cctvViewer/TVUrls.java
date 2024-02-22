@@ -1,9 +1,14 @@
 package com.eanyatonic.cctvViewer;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.google.android.gms.common.util.ArrayUtils;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Dictionary;
 
 public class TVUrls {
@@ -88,7 +93,7 @@ public class TVUrls {
                     }
                     ]
                 """;
-    public static void loadFromJson(String jsonString ){
+    public static void loadFromJson(String jsonString ,SharedPreferences preferences){
         // JSON字符串
 
         // 使用Gson库将JSON字符串转换为Java对象
@@ -105,9 +110,25 @@ public class TVUrls {
                 Log.d("TAG", "\""+b.name+","+b.url+",");
             }
         }*/
-        TVUrls.liveUrls2=gson.fromJson(jsonString,TVUrlGroup[].class);
+        var urls2=gson.fromJson(jsonString,TVUrlGroup[].class);
+        TVUrlGroup cg=null;
+        Gson gson2 = new Gson();
+        try {
+
+            cg = gson2.fromJson(preferences.getString("array_key", """
+                   {
+                    "name":"自定义",
+                    "url":[]
+                    }
+                    """),TVUrlGroup.class);
+        }catch (Exception ee){
+            cg=new TVUrlGroup("自定义",new ArrayList<>());
+        }
+        var custom= new TVUrlGroup[]{cg};
+        TVUrls.liveUrls2= ArrayUtils.concat(urls2,custom);
+
     }
     //public static Dictionary<String,String[]> liveUrls2=new Dictionary<String,String[]>();
-    public static TVUrlGroup[] liveUrls2 ;
+    public static  TVUrlGroup[] liveUrls2 ;
 
 }

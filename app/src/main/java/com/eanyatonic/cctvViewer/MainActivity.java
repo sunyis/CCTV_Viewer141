@@ -141,14 +141,15 @@ public class MainActivity extends AppCompatActivity {
                                      
                                      function af(){ 
                                          var fullscreenBtn = document.querySelector('#player_pagefullscreen_yes_player')||document.querySelector('.videoFull')||document.querySelector('.vjs-fullscreen-control');
-                                         if(fullscreenBtn!=null){
+                                         var video=document.querySelector('video');
+                                         if(video!=null){
                                             //alert(fullscreenBtn)
-                                          fullscreenBtn.click();
-                                        var video=document.querySelector('video');
+                                          //fullscreenBtn.click();
+                                        document.body.appendChild(video)
                                           video.volume=1;
                                           //alert(window.location.href);
 
-                                            if(document.querySelector('.vjs-fullscreen-control')!=null){
+                                            //if(document.querySelector('.vjs-fullscreen-control')!=null){
 
                                         				video.style.position = 'fixed';
                                         				video.style.top = '0';
@@ -161,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
                                         				const aspectRatio = video.videoWidth / video.videoHeight;
                                         				const screenRatio = window.innerWidth / window.innerHeight;
                                         				//alert(video.videoWidth +"",""+ video.videoHeight+window.innerWidth +"",""+ window.innerHeight);
-                                            }
+                                            //}
                     
                                           window.Android.reload("Hello from WebView!")
                                          }else{

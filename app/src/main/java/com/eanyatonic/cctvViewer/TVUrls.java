@@ -81,6 +81,10 @@ public class TVUrls {
                                             "GRTN文化频道","https://www.gdtv.cn/tvChannelDetail/75",
                                             "GRTN生活频道","https://www.gdtv.cn/tvChannelDetail/102",
                                             "GRTN教育频道","https://www.gdtv.cn/tvChannelDetail/104"]
+                    },
+                    {
+                    "name":"河北",
+                    "url":["河北卫视","https://www.hebtv.com/19/19js/st/xdszb/index.shtml"]
                     }
                     ]
                 """;

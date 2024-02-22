@@ -374,7 +374,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean dispatchKeyEvent(KeyEvent event) {
         // 重置隐藏计时器
         restartHideTimer();
-        if(findViewById(R.id.list0).getVisibility()==View.VISIBLE){
+        if(findViewById(R.id.menu).getVisibility()==View.VISIBLE){
             return super.dispatchKeyEvent(event);
         }
         if (event.getAction() == KeyEvent.ACTION_DOWN) {

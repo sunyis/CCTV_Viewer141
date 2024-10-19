@@ -152,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
                                           //alert(window.location.href);
 
                                             //if (document.querySelector('.vjs-fullscreen-control') != null) {
+  const video = document.querySelector('video');
   video.style.position = 'fixed';
   video.style.top = '0';
   video.style.left = '0';
@@ -163,16 +164,6 @@ public class MainActivity extends AppCompatActivity {
 
   const aspectRatio = video.videoWidth / video.videoHeight;
   const screenRatio = window.innerWidth / window.innerHeight;
-
-  if (aspectRatio > screenRatio) {
-    // 如果视频的宽高比大于屏幕的宽高比，说明视频相对于屏幕过宽，需要调整宽度
-    video.style.width = '100%';
-    video.style.height = 'auto';
-  } else {
-    // 如果视频的宽高比小于等于屏幕的宽高比，说明视频相对于屏幕过高，需要调整高度
-    video.style.width = 'auto';
-    video.style.height = '100%';
-  }
 }
                                             //}
                     

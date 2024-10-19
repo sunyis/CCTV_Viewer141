@@ -22,19 +22,19 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew assembleRelease --stacktrace
 
-- name: Create Release
-  id: create_release
-  uses: actions/create-release@v1
-  env:
-    GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }} # 使用自定义的 GitHub Token
-  with:
-    tag_name: "tagv${{ github.run_number }}" # 使用引号包裹 tag_name
-    release_name: "Release ${{ github.run_number }}" # 使用引号包裹 release_name
-    body: |
-        这是一个自动生成的发行说明。 # 这里可以填入你想要的发行说明内容
-    draft: false
-    prerelease: false
-    
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }} 
+      with:
+        tag_name: tagv${{ github.run_number }}
+        release_name: Release${{ github.run_number }}
+        body: |
+            ${{ steps.Changelog.outputs.changelog }}
+        draft: false
+        prerelease: false
+        
     - name: upload release asset
       id: upload-release-asset2
       uses: actions/upload-release-asset@v1
@@ -44,4 +44,4 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
         asset_path: ./app/build/outputs/apk/release/app-release.apk
         asset_name: CCTV_Viewer_v${{ github.run_number }}.apk
-        asset_content_type: application/zip
+        asset_content_type: application/zip  

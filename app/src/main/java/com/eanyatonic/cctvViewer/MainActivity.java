@@ -151,20 +151,19 @@ public class MainActivity extends AppCompatActivity {
                                           video.volume=1;
                                           //alert(window.location.href);
 
-                                            //if (document.querySelector('.vjs-fullscreen-control') != null) {
-  const video = document.querySelector('video');
-  video.style.position = 'fixed';
-  video.style.top = '0';
-  video.style.left = '0';
-  video.style.width = '100%';
-  video.style.height = '100%';
-  video.style.zIndex = '9999';
-  video.style.objectFit = 'contain'; /* 保持宽高比，视频铺满容器 */
-  video.style.backgroundColor = 'black'; /* 背景颜色可以根据需要更改 */
+                                            //if(document.querySelector('.vjs-fullscreen-control')!=null){
 
-  const aspectRatio = video.videoWidth / video.videoHeight;
-  const screenRatio = window.innerWidth / window.innerHeight;
-}
+                                        				video.style.position = 'fixed';
+                                        				video.style.top = '0';
+                                        				video.style.left = '0';
+                                        				video.style.width = '100%';
+                                        				video.style.height = '100%';
+                                        				video.style.zIndex = '9999';
+						                    			video.style.objectFit= 'fill'; /* 保持宽高比，视频铺满容器 */
+					                    				video.style.backgroundColor= 'black'; /* 背景颜色可以根据需要更改 */
+                                        				const aspectRatio = video.videoWidth / video.videoHeight;
+                                        				const screenRatio = window.innerWidth / window.innerHeight;
+                                        				//alert(video.videoWidth +"",""+ video.videoHeight+window.innerWidth +"",""+ window.innerHeight);
                                             //}
                     
                                           window.Android.reload("Hello from WebView!")

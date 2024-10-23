@@ -15,7 +15,7 @@ public class TVUrls {
     public static String defJson="""
                 [{
                 "name":"央视频",
-                "url":["CCTV-1 综合","https://www.yangshipin.cn/tv/home?pid\u003d600001859",
+                "url":["CCTV-1 综合","https://www.yangshipin.cn/tv/home?pid=600001859",
                                         "CCTV-2 财经","https://tv.cctv.com/live/cctv2/",
                                         "CCTV-3 综艺","https://tv.cctv.com/live/cctv3/",
                                         "CCTV-4 中文国际","https://tv.cctv.com/live/cctv4/",

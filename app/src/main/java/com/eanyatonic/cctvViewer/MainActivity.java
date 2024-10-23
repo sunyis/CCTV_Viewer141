@@ -449,7 +449,7 @@ public class MainActivity extends AppCompatActivity {
             webView.setInitialScale(getMinimumScale());
             var url=TVUrls.liveUrls2[g].getTvUrls().get(i).url;//  liveUrls[currentLiveIndex];
             webView.loadUrl(url);
-            if(url.startsWith("https://www.yangshipin.cn/tv/home?pid\u003d600001859")) {
+            if(url.startsWith("https://www.yangshipin.cn/tv/home?pid=600001859")) {
                 ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
                 // 定义要执行的任务

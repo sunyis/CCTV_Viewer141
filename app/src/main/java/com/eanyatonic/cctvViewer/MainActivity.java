@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         webSettings.setDomStorageEnabled(true);
         webSettings.setDatabaseEnabled(true);
         webSettings.setMediaPlaybackRequiresUserGesture(false);
-        webSettings.setUserAgentString("Mozilla/5.0（Linux；Android %s；K）AppleWebKit/537.36（KHTML，Gecko）Chrome/130.0.0.0 Mobile Safari/537.36");
+        webSettings.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36");
         webSettings.setBlockNetworkImage(true);
 
         // 启用 JavaScript 自动点击功能
@@ -449,7 +449,7 @@ public class MainActivity extends AppCompatActivity {
             webView.setInitialScale(getMinimumScale());
             var url=TVUrls.liveUrls2[g].getTvUrls().get(i).url;//  liveUrls[currentLiveIndex];
             webView.loadUrl(url);
-            if(url.startsWith("https://www.yangshipin.cn/tv/home")) {
+            if(url.startsWith("https://www.yangshipin.cn/tv/home?pid\u003d600001859")) {
                 ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
                 // 定义要执行的任务
